@@ -3,6 +3,8 @@ import bodyParser from 'body-parser';
 import {filterImageFromURL, deleteLocalFiles} from './util/util';
 import { Router, Request, Response } from 'express';
 
+
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
 (async () => {
 
   // Init the Express application
