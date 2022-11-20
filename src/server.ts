@@ -1,7 +1,10 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import {filterImageFromURL, deleteLocalFiles} from './util/util';
+import { Router, Request, Response } from 'express';
 
+
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
 (async () => {
 
   // Init the Express application
@@ -29,6 +32,16 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
 
   /**************************************************************************** */
 
+  app.get('/filteredimage', async (req: Request, res: Response) => {
+    const image_url = req.query.image_url.toString();
+    if (!image_url) {
+      res.status(400).send("Image url is required")
+    }
+    const  filtered_image = await filterImageFromURL(image_url);
+    res.status(200).sendFile(filtered_image, () => {
+      deleteLocalFiles([filtered_image]);
+    })
+  });
   //! END @TODO1
   
   // Root Endpoint
